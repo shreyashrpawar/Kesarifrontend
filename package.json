@@ -8,6 +8,10 @@
     "start": "nuxt start",
     "generate": "nuxt generate"
   },
+  "engines": {
+    "node": ">=16.15.0"
+  },
+
   "dependencies": {
     "@bachdgvn/vue-otp-input": "^1.0.8",
     "@nuxt/content": "^1.9.0",
