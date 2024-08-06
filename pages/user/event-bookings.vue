@@ -553,7 +553,7 @@ export default {
       let storage = JSON.parse(window.localStorage.getItem("vuex"));
       if (storage) {
         this.$axios
-          .get("api/v1/get_event_bookings_history", {
+          .get("get_event_bookings_history", {
             headers: {
               Authorization: `Bearer ${storage.auth.token}`,
             },

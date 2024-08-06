@@ -991,7 +991,7 @@ export default {
   let storage = JSON.parse(window.localStorage.getItem("vuex"));
       if(storage){
       this.$axios
-        .get("api/v1/getEventManagementData",{
+        .get("getEventManagementData",{
               headers: {
                 Authorization: `Bearer ${storage.auth.token}`,
               },
@@ -1034,7 +1034,7 @@ export default {
     getPropertyWithLocations() {
       let storage = JSON.parse(window.localStorage.getItem("vuex"));
       if(storage){
-        this.$axios.get("api/v1/get_property_with_location",{
+        this.$axios.get("get_property_with_location",{
           headers: {
               Authorization: `Bearer ${storage.auth.token}`,
             },
@@ -1149,7 +1149,7 @@ export default {
       }
       if(storage){
       this.$axios
-        .get("api/v1/getEventManagementData",{
+        .get("getEventManagementData",{
               headers: {
                 Authorization: `Bearer ${storage.auth.token}`,
               },

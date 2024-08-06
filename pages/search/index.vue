@@ -387,7 +387,7 @@ export default {
     },
 
     getLocations() {
-      this.$axios.get("api/v1/locations").then((res) => {
+      this.$axios.get("locations").then((res) => {
         this.locationList = res.data.data;
       });
     },
@@ -400,7 +400,7 @@ export default {
       this.$store.dispatch("toggleLoading", true, { root: true });
       this.isLoading = true;
       this.$axios
-        .get("api/v1/properties", {
+        .get("properties", {
           params: {
             start_date: this.$route.query.start_date,
             end_date: this.$route.query.end_date,
@@ -453,7 +453,7 @@ export default {
         },
       });
       this.$axios
-        .get("api/v1/properties", {
+        .get("properties", {
           params: {
             start_date: this.form.startDate,
             end_date: this.form.endDate,
@@ -473,7 +473,7 @@ export default {
 
     addResorts() {
       this.$axios
-        .get("api/v1/properties", {
+        .get("properties", {
           params: {
             page: this.currentPage + 1,
           },

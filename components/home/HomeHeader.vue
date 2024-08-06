@@ -260,7 +260,7 @@ export default {
       this.$toast.success("Logged out successfully");
     },
     getLocations() {
-      this.$axios.get("api/v1/locations").then((res) => {
+      this.$axios.get("locations").then((res) => {
         this.locations = res.data.data;
         console.log(this.locations);
       });

@@ -121,7 +121,7 @@ export default {
         );
       } else {
         this.$axios
-          .post("api/v1/register", this.form)
+          .post("register", this.form)
           .then((res) => {
             if (res.data.success === true) {
               this.$toast.success(

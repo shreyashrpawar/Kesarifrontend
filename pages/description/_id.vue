@@ -880,7 +880,7 @@ export default {
     budgetCalculatorData() {
       const id = this.$route.query.id;
       this.$axios
-        .get(`api/v1/properties/${id}/budget-calculator`, {
+        .get(`properties/${id}/budget-calculator`, {
           params: {
             check_in: this.startDate,
             check_out: this.endDate,
@@ -965,7 +965,7 @@ export default {
       const id = this.$route.query.id;
       this.isLoading = true;
       this.$axios
-        .get(`api/v1/properties/${id}/available`, {
+        .get(`properties/${id}/available`, {
           params: {
             start_date: this.startDate,
             end_date: this.endDate,
@@ -1029,7 +1029,7 @@ export default {
     getDescription() {
       this.$store.dispatch("toggleLoading", true, { root: true });
       const id = this.$route.query.id;
-      this.$axios.get("api/v1/properties/" + id).then((resp) => {
+      this.$axios.get("properties/" + id).then((resp) => {
         const data = resp.data.data;
         console.log(data);
         this.name = data.name;
@@ -1069,7 +1069,7 @@ export default {
       let end_date = endDate ?? this.$route.query.end_date;
       let adults = guests ?? this.$route.query.guests;
       this.$axios
-        .get(`api/v1/properties/${id}/budget`, {
+        .get(`properties/${id}/budget`, {
           params: {
             start_date: start_date,
             end_date: end_date,
@@ -1158,7 +1158,7 @@ export default {
             console.log(">>details<< " + this.detailsBudget);
             this.$axios
               .post(
-                "api/v1/pre-booking",
+                "pre-booking",
                 {
                   user_budget: this.$route.query.budget,
                   check_in: this.preBookingStartDate,

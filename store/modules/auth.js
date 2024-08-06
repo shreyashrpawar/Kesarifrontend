@@ -30,7 +30,7 @@ const actions = {
 
     return new Promise((resolve, reject) => {
       this.$axios
-        .post("api/v1/login", user)
+        .post("login", user)
         .then(async (resp) => {
           console.log(resp.data);
           if (resp) {

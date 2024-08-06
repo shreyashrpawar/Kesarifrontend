@@ -458,13 +458,13 @@ export default {
     },
 
     getLocations() {
-      this.$axios.get("api/v1/locations").then((res) => {
+      this.$axios.get("locations").then((res) => {
         this.locations = res.data.data;
       });
     },
 
     getFeaturedResorts() {
-      this.$axios.get("api/v1/property/random").then((res) => {
+      this.$axios.get("property/random").then((res) => {
         this.featuredResorts = res.data.data;
         console.log("test");
       });
@@ -472,7 +472,7 @@ export default {
 
     getTopDestination() {
       this.$store.dispatch("toggleLoading", true);
-      this.$axios.get("api/v1/top-destination").then((res) => {
+      this.$axios.get("top-destination").then((res) => {
         this.topDestinations = res.data.data;
         console.log(
           "🚀 ~ file: index.vue ~ line 533 ~ this.$axios.get ~ topDestinations",

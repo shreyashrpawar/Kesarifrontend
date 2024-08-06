@@ -127,13 +127,27 @@
                             <span v-if="row.item.transaction_status === 'PAYMENT_SUCCESS'">
                               <b-badge pill variant="success">Paid </b-badge>
                             </span>
-                            <span v-else-if="row.item.transaction_status === 'pending'">
+                            <span v-else-if="row.item.transaction_status === 'pending' || row.item.transaction_status === 'PAYMENT_PENDING'">
                               <b-badge pill variant="warning">Pending</b-badge>
                             </span>
                             <span v-else-if="row.item.transaction_status === 'PAYMENT_FAILED'">
                               <b-badge pill variant="danger">Failed</b-badge>
                             </span>
                           </template>
+                          
+                          <template #cell(remarks)="row">
+                            <span v-if="row.item.transaction_id">{{
+                                row.item.transaction_id
+                            }}</span>
+                            <span v-else>Not Available</span>
+                          </template>
+                          <template #cell(trans_date)="row">
+                            <span v-if="row.item.updated_at">{{
+                                dateFormatter(row.item.updated_at)+" "+timeFormatter(row.item.updated_at)
+                            }}</span>
+                            <span v-else>Not Available</span>
+                          </template>
+
                           <template #cell(payment_link)="row">
                             <template v-if="row.item.date && row.item.transaction_status === 'pending' || row.item.transaction_status === 'PAYMENT_FAILED' ">
                               <button
@@ -496,7 +510,11 @@ export default {
         },
         {
           key: "remarks",
-          label: "Note",
+          label: "Transaction ID",
+        },
+        {
+          key: "trans_date",
+          label: "Transaction date",
         },
         {
            key: "payment_link", 
@@ -513,10 +531,15 @@ export default {
   methods: {
     initiatePayment(paymentItem) {
       console.log(paymentItem,"item");
+      let storage = JSON.parse(window.localStorage.getItem("vuex"));
       const { booking_payment_summaries_id, installment_no, amount } = paymentItem;
       
-      const url = `api/v1/payment?amount=${amount}&booking_payment_summaries_id=${booking_payment_summaries_id}&installment_no=${installment_no}`;
-      this.$axios.get(url)
+      const url = `payment?amount=${amount}&booking_payment_summaries_id=${booking_payment_summaries_id}&installment_no=${installment_no}`;
+      this.$axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${storage.auth.token}`,
+            },
+          })
       .then(response => {
         // Handle the response, e.g., redirect to the payment gateway
         console.log(response)
@@ -534,13 +557,16 @@ export default {
     dateFormatter(date) {
       return moment(date).format("DD/MM/YYYY");
     },
+    timeFormatter(date){
+      return moment(date).format('LTS');
+    },
 
     isPayButtonDisabled(row) {
      
     for (let i = row.index; i >= 0; i--) {
-      console.log(this.bookingData[i].booking_payment_summary.booking_payment_details,"yoo");
+      console.log(this.bookingData[i]?.booking_payment_summary?.booking_payment_details,"yoo");
      
-      if (this.bookingData[i].booking_payment_summary.booking_payment_details.transaction_status === 'PAYMENT_SUCCESS') {
+      if (this.bookingData[i]?.booking_payment_summary?.booking_payment_details?.transaction_status === 'PAYMENT_SUCCESS') {
         return true; // Disable the pay button if any row above has pending status
       }
     }
@@ -554,7 +580,7 @@ export default {
       let storage = JSON.parse(window.localStorage.getItem("vuex"));
       if (storage) {
         this.$axios
-          .get("api/v1/pre-booking", {
+          .get("pre-booking", {
             headers: {
               Authorization: `Bearer ${storage.auth.token}`,
             },
