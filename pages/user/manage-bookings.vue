@@ -127,7 +127,7 @@
                             <span v-if="row.item.transaction_status === 'PAYMENT_SUCCESS'">
                               <b-badge pill variant="success">Paid </b-badge>
                             </span>
-                            <span v-else-if="row.item.transaction_status === 'pending' || row.item.transaction_status === 'PAYMENT_PENDING'">
+                            <span v-else-if="row.item.transaction_status === 'pending' || row.item.transaction_status === 'PAYMENT_PENDING' || row.item.transaction_status === 'PAYMENT_INITIATED'">
                               <b-badge pill variant="warning">Pending</b-badge>
                             </span>
                             <span v-else-if="row.item.transaction_status === 'PAYMENT_FAILED'">
@@ -142,17 +142,17 @@
                             <span v-else>Not Available</span>
                           </template>
                           <template #cell(trans_date)="row">
-                            <span v-if="row.item.updated_at">{{
+                            <span v-if="row.item.transaction_status!='pending'">{{
                                 dateFormatter(row.item.updated_at)+" "+timeFormatter(row.item.updated_at)
                             }}</span>
                             <span v-else>Not Available</span>
                           </template>
 
                           <template #cell(payment_link)="row">
-                            <template v-if="row.item.date && row.item.transaction_status === 'pending' || row.item.transaction_status === 'PAYMENT_FAILED' ">
+                            <template v-if="row.item.transaction_status === 'pending' || row.item.transaction_status === 'PAYMENT_FAILED' ">
                               <button
-                              :disabled="isPayButtonDisabled(row)"
-                                @click="initiatePayment(row.item)"
+                              :disabled=isPayButtonDisabled(row)
+                                @click=initiatePayment(row.item)
                                 class="btn btn-primary"
                                 :class="{ 'btn-disabled': isPayButtonDisabled(row) }">
                                 Pay Now
@@ -562,17 +562,14 @@ export default {
     },
 
     isPayButtonDisabled(row) {
-     
-    for (let i = row.index; i >= 0; i--) {
-      console.log(this.bookingData[i]?.booking_payment_summary?.booking_payment_details,"yoo");
-     
-      if (this.bookingData[i]?.booking_payment_summary?.booking_payment_details?.transaction_status === 'PAYMENT_SUCCESS') {
-        return true; // Disable the pay button if any row above has pending status
+      if(row.index==0){
+        return false;
       }
-    }
-    return false; // Enable the pay button if no row above has pending status
-  },
-  
+      if(row.item.active_installment==1){
+        return false;
+      }
+      return true;
+   },
 
     getPreBookingData() {
       console.log(">>>>>>>>>");
